@@ -4,9 +4,11 @@ from teams.models import Team
 
 
 class Match(models.Model):
-
-    home_team = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL)
-    away_team = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL)
+    """
+    Model representing a football team.
+    """
+    home_team = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL, related_name='home_team')
+    away_team = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL, related_name='away_team')
 
 
 class MatchPhoto(models.Model):
