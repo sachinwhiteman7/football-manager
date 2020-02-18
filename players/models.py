@@ -9,3 +9,5 @@ class Player(models.Model):
     """
     name = models.CharField(max_length=256, default="")
     team = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL)
+    jersey_number = models.PositiveSmallIntegerField(default=0)
+    photo = models.ImageField(upload_to="photos/players")

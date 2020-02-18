@@ -27,7 +27,7 @@ class Tournament(models.Model):
 
     name = models.CharField(max_length=256, default="")
     description = models.TextField()
-    logo = models.ImageField(upload_to="/tournament/logos/")
+    logo = models.ImageField(upload_to="tournament/logos")
     venue = models.CharField(max_length=256, default="")
     status = models.CharField(max_length=32, choices=STATUS_CHOICES)
     type = models.CharField(max_length=32, choices=TYPE_CHOICES)

@@ -6,3 +6,4 @@ class Team(models.Model):
     Model to represent a team.
     """
     name = models.CharField(max_length=256, default="")
+    logo = models.ImageField(upload_to="team/logos")
