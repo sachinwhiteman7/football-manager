@@ -9,9 +9,9 @@ class Card(models.Model):
     """
     Model for a Card.
     """
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    player = models.ForeignKey(Player, null=True, on_delete=models.SET_NULL)
     team = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL)
-    match = models.ForeignKey(Match, on_delete=models.CASCADE)
+    match = models.ForeignKey(Match, null=True, on_delete=models.SET_NULL)
     time = models.PositiveSmallIntegerField(default=0)
     created_on = models.DateTimeField(auto_now=True)
 
@@ -25,7 +25,7 @@ class RedCard(Card):
 
 class YellowCard(Card):
     """
-    Model for red card.
+    Model for yellow card.
     """
     reason = models.CharField(max_length=256, choices="")
     is_second_yellow = models.BooleanField(default=False)
