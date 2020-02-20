@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from teams.models import Team
+from venues.models import Venue
 
 PENDING = "pending"
 IN_PROGRESS = "in progress"
@@ -34,7 +35,7 @@ class Tournament(models.Model):
     name = models.CharField(max_length=256, default="")
     description = models.TextField()
     logo = models.ImageField(upload_to="tournament/logos")
-    venue = models.CharField(max_length=256, default="")
+    venue = models.ForeignKey(Venue, null=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=32, choices=STATUS_CHOICES)
     type = models.CharField(max_length=32, choices=TOURNAMENT_TYPE_CHOICES)
     teams = models.ManyToManyField(Team)
@@ -46,7 +47,7 @@ class Tournament(models.Model):
         default=0,
         validators=[MaxValueValidator(10)]
     )
-    no_of_teams = models.PositiveSmallIntegerField(default=0)
+    no_of_teams = models.PositiveSmallIntegerField(default=100)
     winner = models.ForeignKey(
         Team,
         null=True,
@@ -55,10 +56,16 @@ class Tournament(models.Model):
     )
 
 
+class TournamentPhoto(models.Model):
+    description = models.CharField(max_length=1024, default='')
+    photo = models.ImageField(upload_to="photos/tournaments")
+    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
+
+
 class Stage(models.Model):
 
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE)
-    name = models.CharField(max_length=256, default="")
+    name = models.CharField(max_length=128, default="")
     count = models.PositiveSmallIntegerField(default=0)
     stage_type = models.CharField(max_length=24, choices=STAGE_TYPE_CHOICES, default=KNOCK_OUT)
 
@@ -69,6 +76,7 @@ class Stage(models.Model):
 class Group(models.Model):
 
     stage = models.ForeignKey(Stage, on_delete=models.CASCADE)
+    name = models.CharField(max_length=128, default="")
     teams = models.ManyToManyField(Team)
     count = models.PositiveSmallIntegerField(default=0)
     number_of_teams = models.PositiveSmallIntegerField(
@@ -98,3 +106,6 @@ class TeamPointsTable(models.Model):
 
     def goal_difference(self):
         return self.goal_scored - self.goal_against
+
+    class Meta:
+        unique_together = ('points_table', 'team')

@@ -77,6 +77,6 @@ class Match(models.Model):
 
 
 class MatchPhoto(models.Model):
-    description = models.CharField(max_length=1024)
+    description = models.CharField(max_length=1024, default='')
     photo = models.ImageField(upload_to="photos/matches")
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
