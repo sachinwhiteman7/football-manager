@@ -5,7 +5,7 @@ from django.conf import settings
 
 
 class User(AbstractUser):
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_('email address'), unique=True, null=True)
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
@@ -13,6 +13,12 @@ class User(AbstractUser):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name='profile'
+    )
     photo = models.ImageField(upload_to='photos/profile', blank=True)
     phone = models.CharField(max_length=16, null=True, blank=True)
+
