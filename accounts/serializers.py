@@ -10,11 +10,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class UserCreateSerializer(serializers.HyperlinkedModelSerializer):
     profile = UserProfileSerializer(required=True)
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password', 'placeholder': 'Password'}
+    )
 
     class Meta:
         model = User
         fields = ('url', 'username', 'email', 'first_name', 'last_name', 'password', 'profile')
-        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         profile_data = validated_data.pop('profile')
@@ -31,12 +35,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'first_name', 'last_name', 'profile')
+        fields = ('username', 'email', 'first_name', 'last_name', 'profile')
+        read_only_fields = ('username',)
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile')
 
         instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.save()
 
         if hasattr(instance, 'profile'):

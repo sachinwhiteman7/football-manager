@@ -1,9 +1,10 @@
 from django.conf.urls import url, include
 from rest_framework import routers
-from accounts.viewsets import UserViewSet
+from accounts.viewsets import UserSignupViewSet, UserViewSet
 
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+router.register(r'signup', UserSignupViewSet)
+router.register(r'user', UserViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
