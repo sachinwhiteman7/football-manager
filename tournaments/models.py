@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+from accounts.models import User
 from teams.models import Team
 from venues.models import Venue
 
@@ -32,13 +33,14 @@ STAGE_TYPE_CHOICES = (
 
 class Tournament(models.Model):
 
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=256, default="")
-    description = models.TextField()
-    logo = models.ImageField(upload_to="tournament/logos")
+    description = models.TextField(default="")
+    logo = models.ImageField(upload_to="tournament/logos", null=True, blank=True)
     venue = models.ForeignKey(Venue, null=True, on_delete=models.SET_NULL)
     status = models.CharField(max_length=32, choices=STATUS_CHOICES)
     type = models.CharField(max_length=32, choices=TOURNAMENT_TYPE_CHOICES)
-    teams = models.ManyToManyField(Team)
+    teams = models.ManyToManyField(Team, blank=True)
     no_of_players_per_team = models.PositiveSmallIntegerField(
         default=11,
         validators=[MaxValueValidator(11)]

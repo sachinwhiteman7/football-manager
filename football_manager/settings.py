@@ -131,6 +131,10 @@ AUTH_USER_MODEL = 'accounts.User'
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = ''
+
 # rest framework jwt authentication
 
 REST_FRAMEWORK = {
